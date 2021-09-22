@@ -43,12 +43,13 @@ router.get('/users/:id/followings', helpers.ensureAuthenticated, userController.
 
 router.get('/users/:id/followers', helpers.ensureAuthenticated, userController.getFollowers)
 
+router.get('/users/self/userInfo', helpers.ensureAuthenticated, userController.getSelfUserInfo) // 增加
+
 router.get('/users/:id/userInfo', helpers.ensureAuthenticated, userController.getUserInfo)
 
 router.get('/users/:id', helpers.ensureAuthenticated, userController.userHomePage)
 
 router.put('/users/:id', helpers.ensureAuthenticated, upload.array('files', 2), userController.editUserData) //增加
-
 
   //followship路由
 router.post('/followships', helpers.ensureAuthenticated, followshipController.follow) //路由要改

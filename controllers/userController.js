@@ -45,11 +45,28 @@ const userController = {
     }
   },
 
+  getSelfUserInfo: async(req, res) => {
+  const id = req.user.id
+  try {
+    const userData = await User.findByPk(id, {
+      attributes: { exclude: ['password', 'createdAt', 'updatedAt', 'role'] },
+      include: [
+        { model: User, as: 'Followings', attributes: ['id'] },
+        { model: User, as: 'Followers', attributes: ['id'] }
+      ]
+    })
+
+    return res.json(userData)
+  }
+  catch (error) {
+    console.log(error)
+  }
+  },
+
   // 取出使用者資訊
   getUserInfo: async (req, res) => {
-    const userId = req.user.id
     const requestId = Number(req.params.id)
-    const id = userId === requestId ? userId : requestId
+    const id = requestId
     try {
       const userData = await User.findByPk(id, {
         attributes: { exclude: ['password', 'createdAt', 'updatedAt', 'role'] },
