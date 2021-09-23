@@ -23,8 +23,9 @@ const options = {
 }
 
 passport.use(new jwtStrategy(options, async (payload, done) => {
-    try {
-      const user = await User.findByPk(payload.sub)
+  try {
+    console.log("payload", payload)
+    const user = await User.findByPk(payload.sub)
       if (user) {
         return done(null, user)
       } else {
