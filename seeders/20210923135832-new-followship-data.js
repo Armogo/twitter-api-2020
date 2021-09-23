@@ -21,7 +21,7 @@ function followships(userIds) {
   const allFollowships = []
   let followingCount = 4
   userIds.forEach(userId => {
-    let currentFollowing = (Number(userId) + 1)
+    let currentFollowing = (Number(userId) + 10)
     for (let i = followingCount; i >= 0; i--) {
       const followship = {
         followerId: userId,
@@ -29,7 +29,7 @@ function followships(userIds) {
         createdAt: new Date(),
         updatedAt: new Date()
       }
-      currentFollowing += 1
+      currentFollowing += 10
       allFollowships.push(followship)
     }
     followingCount -= 1
