@@ -11,7 +11,7 @@ const cookieParser = require('cookie-parser')
 const passport = require('./config/passport')
 const cors = require('cors')
 const app = express()
-const PORT = process.env.PORT || 3000
+const PORT = process.env.PORT || 3001
 
 app.use(methodOverride('_method'))
 app.use(cookieParser())
@@ -27,7 +27,7 @@ app.use(passport.initialize())
 app.use(passport.session())
 app.get('/', (req, res) => res.send('Hello World!'))
 app.listen(PORT, () => {
-  console.log('server on')
+  console.log(`server on ${PORT}`)
 })
 
 require('./routes')(app)

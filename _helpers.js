@@ -1,9 +1,7 @@
 const passport = require('./config/passport')
 
 const ensureAuthenticated = (req, res, next) => {
-console.log("======================================ensureAuthenticated -> req", req.cookie)
   passport.authenticate('jwt', { session: false }, (err, user) => {
-    console.log("======================================ensureAuthenticated -> user", user.dataValues.id)
     req.user = { ...user.dataValues }
     if (err) {
       return res.json({ status: 'error', message: 'permission denied' })
