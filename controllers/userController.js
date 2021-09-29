@@ -15,7 +15,7 @@ const { QueryTypes } = require('sequelize')
 const readFile = require('../public/javascripts/fileRead')
 
 const userController = {
-  userHomePage: async (req, res) => {
+  getUserHomePage: async (req, res) => {
     const userData = { ...req.user, password: '', email: '' }
     const userId = req.user.id
     const requestId = Number(req.params.id)
@@ -46,24 +46,6 @@ const userController = {
     catch (error) {
       console.log(error)
     }
-  },
-
-  getSelfUserInfo: async(req, res) => {
-  const id = req.user.id
-  try {
-    const userData = await User.findByPk(id, {
-      attributes: { exclude: ['password', 'createdAt', 'updatedAt', 'role'] },
-      include: [
-        { model: User, as: 'Followings', attributes: ['id'] },
-        { model: User, as: 'Followers', attributes: ['id'] }
-      ]
-    })
-
-    return res.json(userData)
-  }
-  catch (error) {
-    console.log(error)
-  }
   },
 
   // 取出使用者資訊
