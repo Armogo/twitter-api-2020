@@ -13,14 +13,13 @@ const sequelize = db.sequelize
 const Op = Sequelize.Op
 const { QueryTypes } = require('sequelize')
 const readFile = require('../public/javascripts/fileRead')
+const helpers = require('../_helpers')
 
 const userController = {
   getUserHomePage: async (req, res) => {
     const userData = { ...req.user, password: '', email: '' }
-    const userId = req.user.id
-    const requestId = Number(req.params.id)
     try {
-      const id = (userId === requestId) ? userId : requestId
+      const id = targetId(req.user.id, req.params.id)
 
       // 取出跟蹤使用者的清單
       let followers = await Followship.findAll({
@@ -85,9 +84,7 @@ const userController = {
 
   //取出使用者發過的推文
   getUserTweets: async (req, res) => {
-    const userId = req.user.id
-    const requestId = Number(req.params.id)
-    const id = userId === requestId? userId: requestId
+    const id = targetId(req.user.id, req.params.id)
     // 取出user所有推文
     try {
       const userTweets = await Tweet.findAll({
@@ -105,9 +102,7 @@ const userController = {
   },
 
   getRepliedTweets: async (req, res) => {
-    const userId = req.user.id
-    const requestId = Number(req.params.id)
-    const id = userId === requestId ? userId : requestId
+    const id = targetId(req.user.id, req.params.id)
     // 取出user所有推文
     try {
       const repliedTweets = await Reply.findAll({
@@ -127,9 +122,7 @@ const userController = {
   },
 
   getLikes: async (req, res) => {
-    const userId = req.user.id
-    const requestId = Number(req.params.id)
-    const id = userId === requestId ? userId : requestId
+    const id = targetId(req.user.id, req.params.id)
     try {
       // 取出user like的推文 並且包括推文作者
       const likedTweets = await Like.findAll({

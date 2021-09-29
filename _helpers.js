@@ -33,8 +33,13 @@ const getUser = (req) => {
   return req.user;
 }
 
+const targetId = (userId, requestId) => {
+  return userId === +requestId ? userId : +requestId
+}
+
 module.exports = {
   ensureAuthenticated,
   ensureAuthenticatedAdmin,
+  targetId,
   getUser,
 };
