@@ -14,7 +14,7 @@ const socket = require('socket.io')
 const passport = require('./config/passport')
 const socketConnection = require('./public/javascripts/server')
 const app = express()
-const PORT = process.env.PORT || 3001
+const PORT = process.env.PORT || 3000
 
 app.use(express.static('public'))//for testing
 
@@ -35,16 +35,4 @@ const server = app.listen(PORT, () => {
   console.log('server on')
 })
 
-require('./routes')(app)
-
-const io = socket(server, {
-  cors: {
-    origin: '*',
-    methods: ['GET', 'POST', 'OPTIONS'],
-  }
-})
-
-app.set('socketio', io)
-
-socketConnection(io)
 module.exports = app 

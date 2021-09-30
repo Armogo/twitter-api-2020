@@ -42,7 +42,7 @@ const checkId = (req) => {
 module.exports = {
   ensureAuthenticated,
   ensureAuthenticatedAdmin,
-  targetId,
+  checkId,
   getUser,
   checkId
 };
