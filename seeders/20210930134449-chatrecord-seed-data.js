@@ -19,7 +19,7 @@ function chatrecords(roomInfos) {
       chatRecords.push({
         roomId: roomInfo.id,
         speakerId: roomInfo.userAId,
-        chatContent: faker.lorem.text(),
+        chatContent: faker.lorem.text().substring(0, 50),
         createdAt: new Date(),
         updatedAt: new Date()
       })
@@ -28,7 +28,7 @@ function chatrecords(roomInfos) {
       chatRecords.push({
         roomId: roomInfo.id,
         speakerId: roomInfo.userBId,
-        chatContent: faker.lorem.text(),
+        chatContent: faker.lorem.text().substring(0, 50),
         createdAt: new Date(),
         updatedAt: new Date()
       })
