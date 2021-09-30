@@ -9,8 +9,6 @@ const multer = require('multer')
 const upload = multer({ dest: 'temp/' })
 
   // home 路由
-router.get('/logout', homeController.logout)
-
 router.post('/signin', homeController.postSignIn)
 
 router.post('/users', homeController.postSignUp)
@@ -49,7 +47,7 @@ router.get('/users/:id/userInfo', helpers.ensureAuthenticated, userController.ge
 
 router.get('/users/:id', helpers.ensureAuthenticated, userController.getUserHomePage)
 
-router.put('/users/:id', helpers.ensureAuthenticated, upload.array('files', 2), userController.editUserData) //增加
+router.put('/users/:id', helpers.ensureAuthenticated, upload.fields([{ name: 'avatar', maxCount: 1 }, { name: 'cover', maxCount: 1 }]), userController.editUserData) //增加
 
 router.post('/users/:id/subscribe', helpers.ensureAuthenticated, userController.subscribeUser)
 

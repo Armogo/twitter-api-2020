@@ -85,7 +85,9 @@ const tweetController = {
       tweet.type = 'new-tweet'
       const tweetJson = JSON.stringify(tweet)
 
+      // 取出訂閱該使用者的清單
       const subscribers = await Subscribe.findAll({
+        raw: true,
         where: { subscribing: { [Op.eq]: req.user.id }},
         attributes: ['subscriber']
       })
@@ -93,19 +95,13 @@ const tweetController = {
       const unreadUpdates = subscribers.map(element => {
         return {
           sendId: req.user.id,
-          receiveId: element,
+          receiveId: element.subscriber,
           unread: tweetJson
         }
       });
 
+      // 批次建立未讀資料進資料庫
       await Unread.bulkCreate(unreadUpdates)
-
-      const io = req.app.get('socketio')
-
-      subscribers.forEach(element => {
-        const roomId = 's' + element
-        io.broadcast.to(roomId).emit('notices', 'new-tweet')
-      });
 
       return res.status(200).json({ tweet })
     }
@@ -122,6 +118,17 @@ const tweetController = {
       data.TweetId = req.params.id
       data.comment = req.body.comment
       const tweetComment = await Reply.create({ ...data })
+
+      // 針對即時訊息做處理
+      const twitterId = Tweet.findByPk(TweetId, { raw: true, attributes: ['UserId'] })
+      tweetComment.user = req.user
+      tweetComment.type = 'tweet-reply'
+      const tweetCommentContent = JSON.stringify(tweetComment)
+      await Unread.create({
+        sendId: req.user.id,
+        receiveId: twitterId,
+        unread: tweetCommentContent
+      })
       return res.status(200).json({ tweetComment })
     }
     catch (error) {
@@ -135,6 +142,19 @@ const tweetController = {
       UserId = req.user.id
       TweetId = Number(req.params.id)
       const like = await Like.findOrCreate({ where: { UserId, TweetId } })
+
+      // 針對即時訊息做處理
+      const twitterId = Tweet.findByPk(TweetId, { attributes: ['UserId'] })
+      const unread = {}
+      unread.type = 'tweet-like'
+      unread.user = req.user
+      const unreadContent = JSON.stringify(unread)
+      await Unread.create({
+        sendId: req.user.id,
+        receiveId: twitterId,
+        unread: unreadContent
+      })
+
       return res.status(200).json({ like })
     }
     catch (error) {

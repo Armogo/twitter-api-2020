@@ -57,7 +57,14 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: 'UserId',
       as: 'likes'
     })
-    User.hasMany(models.PublicChat)
+    User.hasMany(models.PublicChat, {
+      foreignKey: 'speakerId',
+      as: 'userChat'
+    })
+    User.hasMany(models.ChatRecord, {
+      foreignKey: 'speakerId',
+      as: 'userPrivateChat'
+    })
     User.belongsToMany(models.User, {
       through: models.Followship,
       foreignKey: 'followerId',
