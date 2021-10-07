@@ -24,6 +24,7 @@ const adminController = {
   getUsers: async (req, res) => {
     try {
       const allUsers = await User.findAll({
+        where: { role: 'user' },
         attributes: ['name', 'account', 'avatar', 'cover'],
         include: [
           { model: Reply, as: 'replies', attributes: ['id'] },
