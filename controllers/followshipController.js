@@ -36,9 +36,13 @@ const followshipController = {
   unfollow: async (req, res) => {
     try {
       const followingId = req.params.id
+      const followerId = req.user.id
       const unfollow = await Followship.findOne({ where: { followingId: { [Op.eq]: followingId } } })
       if (unfollow) {
-        await Followship.destroy({ where: { followingId: { [Op.eq]: followingId } } })
+        await Followship.destroy({ where: { [Op.and]: [
+          { followingId: { [Op.eq]: followingId } },
+          { followerId: { [Op.eq]: followerId } },
+        ] } })
         return res.status(200).json('Accept')
       } else {
         return res.status(404)
